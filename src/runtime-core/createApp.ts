@@ -17,11 +17,18 @@ function render(vnode, container) {
   patch(vnode, container)
 }
 
+function isObject(value) {
+  return value !== null && typeof value === 'object';
+}
 function patch(vnode, container) {
   //去处理组件
   //
   //
-  processComponent(vnode, container)
+  const { type } = vnode
+  if (typeof type === 'string') {
+    processElement(vnode, container)
+  } else if (isObject(type))
+    processComponent(vnode, container)
 }
 
 function processComponent(vnode, container) {
@@ -35,5 +42,21 @@ function setupRenderEffect(instance, container) {
   const subTree = instance.render()
   console.log({ subTree })
   patch(subTree, container)
+}
+
+function processElement(vnode: any, container: any) {
+  const { type, props, children } = vnode
+  const el = document.createElement(type)
+  Object.keys(props).forEach(key => {
+    el.setAttribute(key, props[key])
+  })
+  if (Array.isArray(children)) {
+    children.forEach(child => {
+      patch(child, el)
+    })
+  } else {
+    el.textContent = children
+  }
+  container.appendChild(el)
 }
 
