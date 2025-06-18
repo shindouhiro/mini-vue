@@ -39,13 +39,15 @@ function processComponent(vnode, container) {
 
 
 function setupRenderEffect(instance, container) {
-  const subTree = instance.render()
+  const subTree = instance.render.call(instance.proxy)
   console.log({ subTree })
   patch(subTree, container)
+  instance.vnode.el = subTree.el
 }
 
 function processElement(vnode: any, container: any) {
   const { type, props, children } = vnode
+  vnode.el = type
   const el = document.createElement(type)
   Object.keys(props).forEach(key => {
     el.setAttribute(key, props[key])

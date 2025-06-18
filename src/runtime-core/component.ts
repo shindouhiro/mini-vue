@@ -1,6 +1,9 @@
 export function createComponentInstance(vnode, container) {
   const component = {
-    vnode
+    vnode,
+    steupState: {},
+    el: null
+
   }
   return component
 }
@@ -21,6 +24,16 @@ function setupStatefulComponent(instance) {
 function handleSetupResult(instance: any, setupResult: any) {
   if (typeof setupResult === 'object') {
     instance.setupState = setupResult
+    instance.proxy = new Proxy(setupResult, {
+      get(target, key) {
+        if (key in setupResult) {
+          return target[key]
+        }
+        if (key === "$el") {
+          return instance.vnode.el
+        }
+      }
+    })
   }
   finishComponentSetup(instance)
 }
