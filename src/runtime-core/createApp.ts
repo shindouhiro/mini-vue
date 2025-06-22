@@ -51,6 +51,10 @@ function processElement(vnode: any, container: any) {
   const el = document.createElement(type)
   Object.keys(props).forEach(key => {
     el.setAttribute(key, props[key])
+    if (key.startsWith('on')) {
+      const event = key.slice(2).toLowerCase()
+      document.addEventListener(event, props[key])
+    }
   })
   if (Array.isArray(children)) {
     children.forEach(child => {
