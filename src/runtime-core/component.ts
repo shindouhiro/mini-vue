@@ -1,3 +1,4 @@
+import { initProps } from "./componentProps"
 import { publicInstanceProxyHandlers } from "./componentPublicInstance"
 
 export function createComponentInstance(vnode, container) {
@@ -12,6 +13,7 @@ export function createComponentInstance(vnode, container) {
 
 export function setupComponent(instance) {
   //TODO: initProps initSlots 
+  initProps(instance)
   setupStatefulComponent(instance)
 }
 function setupStatefulComponent(instance) {
@@ -23,7 +25,7 @@ function setupStatefulComponent(instance) {
 
   const { setup } = Component
   if (setup) {
-    const setupResult = setup()
+    const setupResult = setup(instance)
     handleSetupResult(instance, setupResult)
   }
 }
