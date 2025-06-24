@@ -16,7 +16,8 @@ export default {
     return h("div", { class: 'red' }, [
       h("p", { class: 'blue', onClick: handleClick }, "我是一个p " + this.msg),
       h("input", { class: 'yellow', onChange: handleBlur }, "我是一个span",),
-      h(Foo, { count: 10 }, "")
+      h(Foo, { count: 10, onAdd: (a, b) => { console.log("sum", a + b) } }, "")
+
     ])
   },
   setup() {
